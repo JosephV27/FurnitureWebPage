@@ -146,6 +146,12 @@ CREATE TABLE customer
     CONSTRAINT customer_id_pk PRIMARY KEY (id_customer)
 );
 
+CREATE SEQUENCE seq_customer_id
+    START WITH 1
+    INCREMENT BY 1
+    MAXVALUE 10000
+    CYCLE;
+
 
 -- cambiar el nombre de tabla
 CREATE TABLE order
