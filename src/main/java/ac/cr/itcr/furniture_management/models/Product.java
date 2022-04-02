@@ -1,10 +1,9 @@
 package ac.cr.itcr.furniture_management.models;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "product")
 public class Product {
 
     @Id
@@ -16,11 +15,8 @@ public class Product {
     //TODO FOREIGN KEYS
     @Column(name = "id_category")
     private int idCategory;
-    @Column(name = "name")
     private String name;
-    @Column(name = "description")
     private String description;
-    @Column(name = "price")
     private float price;
 
     public Product()
@@ -28,8 +24,8 @@ public class Product {
 
     }
 
-    public Product(int idProduct, int idCategory, String name, String description, float price) {
-        this.idProduct = idProduct;
+    public Product(int idCategory, String name, String description, float price) {
+        super();
         this.idCategory = idCategory;
         this.name = name;
         this.description = description;

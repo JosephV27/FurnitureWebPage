@@ -13,7 +13,10 @@
 
     <h1>Actualización de Clientes</h1>
 
-    <form class="col-5" th:action="@{/updateCustomer}" th:object="${customer}" method="post">
+
+    <form class="col-5" th:action="@{/saveCustomer}" th:object="${customer}" method="post">
+
+        <input hidden="hidden" th:field="*{idCustomer}">
 
         <div class="form-group">
             <label class="form-label">Identificación</label>
@@ -31,16 +34,8 @@
         <br>
 
         <div class="form-group">
-            <label class="form-label">Primer Apellido</label>
-            <input type="text" th:field="*{firstLastName}" id="firstLastName" name="firstLastName" class="form-control">
-        </div>
-
-        <br>
-
-        <div class="form-group">
-            <label class="form-label">Segundo Apellido</label>
-            <input type="text" th:field="*{secondLastName}" id="secondLastName" name="secondLastName"
-                   class="form-control">
+            <label class="form-label">Apellido</label>
+            <input type="text" th:field="*{lastname}" id="lastname" name="lastname" class="form-control">
         </div>
 
         <br>
@@ -55,13 +50,6 @@
         <div class="form-group">
             <label class="form-label">Teléfono</label>
             <input type="text" th:field="*{phone}" id="phone" name="phone" class="form-control">
-        </div>
-
-        <br>
-
-        <div class="form-group">
-            <label class="form-label">Ciudad</label>
-            <input type="text" th:field="*{city}" id="city" name="city" class="form-control">
         </div>
 
         <br>

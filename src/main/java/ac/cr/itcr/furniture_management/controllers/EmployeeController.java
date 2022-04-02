@@ -47,7 +47,6 @@ public class EmployeeController {
 
     @PostMapping("/updateEmployee")
     public String updateEmployee (@ModelAttribute("employee") Employee employee) {
-        System.out.println(employee.toString());
         employeeService.save(employee);
         return "redirect:/";
     }

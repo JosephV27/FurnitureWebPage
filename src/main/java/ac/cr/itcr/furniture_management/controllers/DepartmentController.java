@@ -13,7 +13,7 @@ public class DepartmentController {
     @Autowired
     private DepartmentService departmentService;
 
-    @GetMapping("/")
+    @GetMapping("/department")
     public String findAllDepartmentsPage(Model model) {
         model.addAttribute("departments", departmentService.findAllDepartments());
         return "DepartmentView";
@@ -29,15 +29,9 @@ public class DepartmentController {
     @PostMapping("/saveDepartment")
     public String saveDepartment (@ModelAttribute("department") Department department) {
         departmentService.save(department);
-        return "redirect:/";
+        return "redirect:/department";
     }
 
-    @PostMapping("/updateDepartment")
-    public String updateDepartment (@ModelAttribute("department") Department department) {
-        System.out.println(department.toString());
-        departmentService.save(department);
-        return "redirect:/";
-    }
 
     @GetMapping("/updateDepartmentPage/{id}")
     public String showUpdateDepartmentPage(@PathVariable("id") int id, Model model) {
@@ -49,7 +43,7 @@ public class DepartmentController {
     @GetMapping("/deleteDepartment/{id}")
     public String deleteDepartment(@PathVariable("id") int id) {
         departmentService.deleteDepartment(id);
-        return "redirect:/";
+        return "redirect:/department";
     }
 
 }

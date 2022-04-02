@@ -12,9 +12,11 @@
 
     <h1>Actualización de Productos</h1>
 
-    <form class="col-5" th:action="@{/updateProduct}" th:object="${product}" method="post">
+    <form class="col-5" th:action="@{/saveProduct}" th:object="${product}" method="post">
 
         <br>
+
+        <input hidden="hidden" th:field="*{idProduct}">
 
         <div class="form-group">
             <label class="form-label">Nombre</label>

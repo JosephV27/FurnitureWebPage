@@ -108,14 +108,21 @@ CREATE SEQUENCE seq_product_id
     CYCLE;
 
 
+insert into category values (1, 'Mesas', 'Mesas de madera');
+insert into category values (2, 'Muebles de Oficina', 'Muebles para oficina');
+insert into category values (3, 'Muebles de Jardin', 'Muebles para jardin');
+insert into category values (4, 'Sillas', 'Sillas de madera');
+insert into category values (5, 'Muebles para interior', 'Muebles para interior de casas');
+insert into category values (6, 'Muebles lujosos', 'Muebles de lujo');
+
 -- *************revisar los not NULLS en esta tabla************
 CREATE TABLE time_logger
 (
     num_employee     NUMBER,
     id_product       NUMBER,
-    ordinary_hours   NUMBER,
-    extra_hours      NUMBER,
-    double_hours     NUMBER,
+    ordinary_hours   NUMBER DEFAULT 0,
+    extra_hours      NUMBER DEFAULT 0,
+    double_hours     NUMBER DEFAULT 0,
     date_time_logger DATE   NOT NULL,
 
     CONSTRAINT time_logger_pk
@@ -132,18 +139,14 @@ CREATE TABLE time_logger
 );
 
 
-CREATE TABLE customer
-(
-    id_customer     NUMBER,
-    identification  VARCHAR2(15)  NOT NULL,
-    name            VARCHAR2(30)  NOT NULL,
-    first_lastname  VARCHAR2(30)  NOT NULL,
-    second_lastname VARCHAR2(30)  NOT NULL,
-    address         VARCHAR2(100) NOT NULL,
-    city            VARCHAR2(30)  NOT NULL,
-    phone           VARCHAR2(30)  NOT NULL,
-
-    CONSTRAINT customer_id_pk PRIMARY KEY (id_customer)
+CREATE TABLE customer (
+    id_customer    NUMBER,
+    identification VARCHAR2(15) NOT NULL,
+    name           VARCHAR2(30) NOT NULL,
+    lastname       VARCHAR2(30) NOT NULL,
+    address        VARCHAR2(100) NOT NULL,
+    phone          VARCHAR2(30) NOT NULL,
+    CONSTRAINT customer_id_pk PRIMARY KEY ( id_customer )
 );
 
 CREATE SEQUENCE seq_customer_id
@@ -153,25 +156,23 @@ CREATE SEQUENCE seq_customer_id
     CYCLE;
 
 
--- cambiar el nombre de tabla
-CREATE TABLE order
+CREATE TABLE receipt
 (
     id_customer NUMBER,
     id_product  NUMBER,
 
-    CONSTRAINT order_pk
+    CONSTRAINT receipt_pk
         PRIMARY KEY (id_customer, id_product),
 
-    CONSTRAINT fk_id_customer_order
+    CONSTRAINT fk_id_customer_receipt
         FOREIGN KEY (id_customer)
             REFERENCES customer (id_customer),
 
-    CONSTRAINT fk_id_product_order
+    CONSTRAINT fk_id_product_receipt
         FOREIGN KEY (id_product)
             REFERENCES product (id_product)
 
 );
-
 
 
 insert into user_credentials
@@ -204,71 +205,66 @@ begin
 end;
 /
 
+select * from time_logger;
+
 -- package example
-CREATE OR REPLACE PACKAGE employee_management AS
-    FUNCTION insert_employee (
-        v_identification  VARCHAR2,
-        v_name            VARCHAR2,
-        v_first_lastname  VARCHAR2,
-        v_second_lastname VARCHAR2,
-        v_salary          NUMBER,
-        v_status          VARCHAR2,
-        v_date_admission  DATE
+CREATE OR REPLACE PACKAGE time_logger_managment AS
+    FUNCTION insert_time_logger (
+        v_num_employee   NUMBER,
+        v_id_product     NUMBER,
+        v_ordinay_hours  NUMBER,
+        v_extra_hours    NUMBER,
+        v_double_hours   NUMBER,
+        date_time_logger DATE
     ) RETURN NUMBER;
 
-END employee_management;
+END time_logger_managment;
 /
 
-CREATE OR REPLACE PACKAGE BODY employee_management AS
---INSERT THE EMPLOYEE
-    FUNCTION insert_employee (
-        v_identification  VARCHAR2,
-        v_name            VARCHAR2,
-        v_first_lastname  VARCHAR2,
-        v_second_lastname VARCHAR2,
-        v_salary          NUMBER,
-        v_status          VARCHAR2,
-        v_date_admission  DATE
-    ) RETURN NUMBER IS
-        id_temp NUMBER;
+
+CREATE OR REPLACE PACKAGE BODY time_logger_managment AS
+
+    FUNCTION insert_time_logger (
+        v_num_employee   NUMBER,
+        v_id_product     NUMBER,
+        v_ordinay_hours  NUMBER,
+        v_extra_hours    NUMBER,
+        v_double_hours   NUMBER,
+        date_time_logger DATE
+    ) RETURN NUMBER AS
+         ex1 exception;
+         pragma exception_init(ex1,-02291);
+        inserted NUMBER;
+        
     BEGIN
-        SELECT
-            num_employee
-        INTO id_temp
-        FROM
-            employee
-        WHERE
-            ( identification = v_identification );
+    
+        INSERT INTO time_logger VALUES (
+            v_num_employee,
+            v_id_product,
+            v_ordinay_hours,
+            v_extra_hours,
+            v_double_hours,
+            date_time_logger
+        );
+        
+    exception
+        when ex1 then
+        dbms_output.put_line('Error');
 
-        RETURN ( id_temp );
-    EXCEPTION
-        WHEN no_data_found THEN
-            INSERT INTO employee VALUES (
-                seq_employee_id.NEXTVAL,
-                v_identification,
-                v_name,
-                v_first_lastname,
-                v_second_lastname,
-                v_salary,
-                v_status,
-                v_date_admission
-            );
+        COMMIT;
+        RETURN inserted;
+    END insert_time_logger;
 
-            COMMIT;
-            SELECT
-                num_employee
-            INTO id_temp
-            FROM
-                employee
-            WHERE
-                ( identification = v_identification );
-
-            RETURN ( id_temp );
-    END insert_employee;
-
-END employee_management;
+END time_logger_managment;
 /
 
+declare
+ id_temp NUMBER;
+begin 
+    id_temp := time_logger_managment.insert_time_logger(25, 1, 8, 0, 0, sysdate);
+    DBMS_OUTPUT.put_line(id_temp);
+end;
+/
 
 CREATE TABLE employeeLogger (
     employee_logger_id NUMBER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,

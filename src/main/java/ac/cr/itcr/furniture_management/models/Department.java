@@ -11,12 +11,11 @@ public class Department {
     @GeneratedValue(generator="seq_department_id")
     @SequenceGenerator(name="seq_department_id",sequenceName="seq_department_id", allocationSize=1)
     private int idDepartment;
-    @Column(name = "name")
     private String name;
 
 
-    public Department(int idDepartment, String name) {
-        this.idDepartment = idDepartment;
+    public Department(String name) {
+        super();
         this.name = name;
     }
 

@@ -27,8 +27,8 @@
                 <td th:text="${product.description}"></td>
                 <td th:text="${product.price}"></td>
                 <td>
-                    <a th:href="@{/updateEmployeePage/{id}(id=${product.idProduct})}" class="btn btn-primary">Actualizar</a>
-                    <a th:href="@{/deleteEmployee/{id}(id=${product.idProduct})}" class="btn btn-danger">Eliminar</a>
+                    <a th:href="@{/updateProductPage/{id}(id=${product.idProduct})}" class="btn btn-primary">Actualizar</a>
+                    <a th:href="@{/deleteProduct/{id}(id=${product.idProduct})}" class="btn btn-danger">Eliminar</a>
                 </td>
             </tr>
             </tbody>

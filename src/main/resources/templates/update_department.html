@@ -12,7 +12,7 @@
 
     <h1>Actualización de Departamentos</h1>
 
-    <form class="col-5" th:action="@{/updateEmployee}" th:object="${department}" method="post">
+    <form class="col-5" th:action="@{/saveDepartment}" th:object="${department}" method="post">
 
         <input hidden="hidden" th:field="*{idDepartment}">
 

@@ -15,10 +15,8 @@
             <th scope="col">Número</th>
             <th scope="col">Identificación</th>
             <th scope="col">Nombre</th>
-            <th scope="col">Primer apellido</th>
-            <th scope="col">Segundo apellido</th>
+            <th scope="col">Apellido</th>
             <th scope="col">Dirección</th>
-            <th scope="col">Ciudad</th>
             <th scope="col">Tel</th>
             <th scope="col">Acción</th>
         </tr>
@@ -28,10 +26,8 @@
             <th th:text="${customer.idCustomer}" scope="row"></th>
             <td th:text="${customer.identification}"></td>
             <td th:text="${customer.name}"></td>
-            <td th:text="${customer.firstLastName}"></td>
-            <td th:text="${customer.secondLastName}"></td>
+            <td th:text="${customer.lastname}"></td>
             <td th:text="${customer.address}"></td>
-            <td th:text="${customer.city}"></td>
             <td th:text="${customer.phone}"></td>
             <td>
                 <a th:href="@{/updateCustomerPage/{id}(id=${customer.idCustomer})}"

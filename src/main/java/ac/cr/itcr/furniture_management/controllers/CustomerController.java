@@ -14,7 +14,7 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @GetMapping("/")
+    @GetMapping("/customer")
     public String findAllCustomersPage(Model model) {
         model.addAttribute("customers", customerService.findAllCustomers());
         return "CustomerView";
@@ -30,14 +30,7 @@ public class CustomerController {
     @PostMapping("/saveCustomer")
     public String saveCustomer (@ModelAttribute("customer") Customer customer) {
         customerService.save(customer);
-        return "redirect:/";
-    }
-
-    @PostMapping("/updateCustomer")
-    public String updateCustomer (@ModelAttribute("customer") Customer customer) {
-        System.out.println(customer.toString());
-        customerService.save(customer);
-        return "redirect:/";
+        return "redirect:/customer";
     }
 
     @GetMapping("/updateCustomerPage/{id}")
@@ -50,7 +43,7 @@ public class CustomerController {
     @GetMapping("/deleteCustomer/{id}")
     public String deleteCustomer(@PathVariable("id") int id) {
         customerService.deleteCustomer(id);
-        return "redirect:/";
+        return "redirect:/customer";
     }
 
 }
