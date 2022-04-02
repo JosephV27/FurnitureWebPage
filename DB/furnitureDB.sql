@@ -205,35 +205,39 @@ begin
 end;
 /
 
-select * from time_logger;
-
 -- package example
 CREATE OR REPLACE PACKAGE time_logger_managment AS
-    FUNCTION insert_time_logger (
+    FUNCTION insert_hours_time_logger (
         v_num_employee   NUMBER,
         v_id_product     NUMBER,
         v_ordinay_hours  NUMBER,
         v_extra_hours    NUMBER,
         v_double_hours   NUMBER,
-        date_time_logger DATE
+        v_date_time_logger DATE
     ) RETURN NUMBER;
+    
+        PROCEDURE update_hours_time_logger (
+        v_num_employee   NUMBER,
+        v_id_product     NUMBER,
+        v_ordinay_hours  NUMBER,
+        v_extra_hours    NUMBER,
+        v_double_hours   NUMBER,
+        v_date_time_logger DATE
+    );
 
 END time_logger_managment;
 /
 
-
 CREATE OR REPLACE PACKAGE BODY time_logger_managment AS
 
-    FUNCTION insert_time_logger (
+    FUNCTION insert_hours_time_logger (
         v_num_employee   NUMBER,
         v_id_product     NUMBER,
         v_ordinay_hours  NUMBER,
         v_extra_hours    NUMBER,
         v_double_hours   NUMBER,
-        date_time_logger DATE
+        v_date_time_logger DATE
     ) RETURN NUMBER AS
-         ex1 exception;
-         pragma exception_init(ex1,-02291);
         inserted NUMBER;
         
     BEGIN
@@ -244,24 +248,42 @@ CREATE OR REPLACE PACKAGE BODY time_logger_managment AS
             v_ordinay_hours,
             v_extra_hours,
             v_double_hours,
-            date_time_logger
+            v_date_time_logger
         );
         
-    exception
-        when ex1 then
-        dbms_output.put_line('Error');
-
         COMMIT;
         RETURN inserted;
-    END insert_time_logger;
+    END insert_hours_time_logger;
+    
+    
+        PROCEDURE update_hours_time_logger (
+         v_num_employee   NUMBER,
+        v_id_product     NUMBER,
+        v_ordinay_hours  NUMBER,
+        v_extra_hours    NUMBER,
+        v_double_hours   NUMBER,
+        v_date_time_logger DATE
+    ) IS
+    BEGIN
+        UPDATE time_logger
+        SET
+            id_product = v_id_product,
+            ordinary_hours = v_ordinay_hours,
+            extra_hours = v_extra_hours,
+            double_hours = v_double_hours
+        WHERE
+                num_employee = v_num_employee
+            AND date_time_logger = v_date_time_logger;
 
+    END;
+    
 END time_logger_managment;
 /
 
 declare
  id_temp NUMBER;
 begin 
-    id_temp := time_logger_managment.insert_time_logger(25, 1, 8, 0, 0, sysdate);
+    id_temp := time_logger_managment.insert_hours_time_logger(25, 9, 8, 0, 0, sysdate);
     DBMS_OUTPUT.put_line(id_temp);
 end;
 /
@@ -351,4 +373,7 @@ BEGIN
 END;
 /
 
+
+
+    
 

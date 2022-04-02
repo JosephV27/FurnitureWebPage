@@ -25,6 +25,13 @@ public class Receipt implements Serializable {
         this.customerIdentification = customerIdentification;
     }
 
+    public Receipt(ReceiptId id, String customerIdentification, String productName) {
+        super();
+        this.id = id;
+        this.productName = productName;
+        this.customerIdentification = customerIdentification;
+    }
+
     public Receipt() {
 
     }
@@ -61,7 +68,7 @@ public class Receipt implements Serializable {
     @Override
     public String toString() {
         return "Receipt{" +
-                "id=" + id +
+                "id=" + id.toString() +
                 ", productName='" + productName + '\'' +
                 ", customerIdentification='" + customerIdentification + '\'' +
                 '}';

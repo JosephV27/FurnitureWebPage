@@ -33,4 +33,12 @@ public class ReceiptId implements Serializable {
     public void setIdProduct(int idProduct) {
         this.idProduct = idProduct;
     }
+
+    @Override
+    public String toString() {
+        return "ReceiptId{" +
+                "idCustomer=" + idCustomer +
+                ", idProduct=" + idProduct +
+                '}';
+    }
 }

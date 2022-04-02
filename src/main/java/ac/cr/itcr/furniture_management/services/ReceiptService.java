@@ -6,6 +6,8 @@ import ac.cr.itcr.furniture_management.repositories.ReceiptRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,21 +18,33 @@ public class ReceiptService {
     private ReceiptRepository receiptRepository;
 
     public List<Receipt> findAllReceipts() {
-        return receiptRepository.findAll();
+
+        List<Object[]> elements = receiptRepository.findAll();
+        List<Receipt> receipts = new ArrayList<>(elements.size());
+        for (Object[] row : elements) {
+            receipts.add(new Receipt(new ReceiptId(((BigDecimal) row[0]).intValue(),
+                    ((BigDecimal) row[1]).intValue()),
+                    (String) row[2],
+                    (String) row[3]));
+        }
+       return receipts;
     }
 
     public void save(Receipt receipt) {
         receiptRepository.save(receipt);
     }
 
-    public void deleteReceipt(ReceiptId id) {
-        receiptRepository.deleteById(id);
+    public void deleteReceipt(int product, int customer) {
+        receiptRepository.deleteById(product, customer);
     }
 
-    public Receipt findReceiptById(ReceiptId id) {
-        Optional<Receipt> receipt = receiptRepository.findById(id);
-        return receipt.get();
-    }
+    public Receipt findReceiptById(int product, int customer) {
+        Object[][] found = receiptRepository.findById(product, customer);
+        Receipt receipt = new Receipt(new ReceiptId(customer, product),
+                (String) found[0][2],
+                (String) found[0][3]);
 
+        return receipt;
+    }
 
 }

@@ -11,21 +11,21 @@
         <table class="table">
             <thead>
             <tr>
-                <th scope="col">Número de producto</th>
+                <th scope="col">Producto</th>
 <!--                <th scope="col">Nombre de producto</th>-->
-                <th scope="col">Número de cliente</th>
+                <th scope="col">Cliente</th>
 <!--                <th scope="col">Cédula de cliente</th>-->
             </tr>
             </thead>
             <tbody>
             <tr th:each="receipt: ${receipts}">
-                <th th:text="${receipt.getId().getIdProduct()}" scope="row"></th>
+                <th th:text="${receipt.productName}" scope="row"></th>
 <!--                <td th:text="${}"></td>-->
-                <td th:text="${receipt.getId().getIdCustomer()}"></td>
+                <td th:text="${receipt.customerIdentification}"></td>
 <!--                <td th:text="${receipt.customerIdentification}"></td>-->
                 <td>
-                    <a th:href="@{/updateReceiptPage/{id}(id=${receipt.id})}" class="btn btn-primary">Actualizar</a>
-                    <a th:href="" class="btn btn-danger">Eliminar</a>
+                    <a th:href="${'/updateReceiptPage/' + {receipt.getId().getIdProduct()} + '/' + {receipt.getId().getIdCustomer()} }" class="btn btn-primary">Actualizar</a>
+                    <a th:href="${'/deleteReceiptPage/' + {receipt.getId().getIdProduct()} + '/' + {receipt.getId().getIdCustomer()} }" class="btn btn-danger">Eliminar</a>
                 </td>
             </tr>
             </tbody>
