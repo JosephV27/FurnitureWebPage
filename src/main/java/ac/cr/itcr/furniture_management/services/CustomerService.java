@@ -31,4 +31,9 @@ public class CustomerService {
         return customer.get();
     }
 
+    public Customer findCustomerByIdentification(String customerIdentification) {
+        Optional<Customer> customer = customerRepository.findByIdentification(customerIdentification);
+        return customer.get();
+    }
+
 }
