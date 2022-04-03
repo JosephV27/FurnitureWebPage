@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ReceiptService {
@@ -38,13 +37,5 @@ public class ReceiptService {
         receiptRepository.deleteById(product, customer);
     }
 
-    public Receipt findReceiptById(int product, int customer) {
-        Object[][] found = receiptRepository.findById(product, customer);
-        Receipt receipt = new Receipt(new ReceiptId(customer, product),
-                (String) found[0][2],
-                (String) found[0][3]);
-
-        return receipt;
-    }
 
 }

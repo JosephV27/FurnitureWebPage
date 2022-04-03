@@ -1,6 +1,7 @@
 package ac.cr.itcr.furniture_management.services;
 
 import ac.cr.itcr.furniture_management.models.Department;
+import ac.cr.itcr.furniture_management.models.Employee;
 import ac.cr.itcr.furniture_management.repositories.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,5 +30,10 @@ public class DepartmentService {
     public Department findDepartmentById(int id) {
         Optional<Department> department = departmentRepository.findById(id);
         return department.get();
+    }
+    public Department findDepartmentByName(String name){
+        Optional<Department> department = departmentRepository.findByName(name);
+        return department.get();
+
     }
 }

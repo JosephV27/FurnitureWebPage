@@ -31,9 +31,6 @@ public class ReceiptController {
     public String findAllReceiptsPage(Model model) {
         List<Receipt> receipts = receiptService.findAllReceipts();
         model.addAttribute("receipts", receipts);
-//        for (Object receipt : receipts) {
-//            System.out.println(receipt.toString());
-//        }
         return "ReceiptView";
     }
 
@@ -53,15 +50,6 @@ public class ReceiptController {
         return "redirect:/receipt";
     }
 
-
-    @GetMapping("/updateReceiptPage/{product}/{customer}")
-    public String showUpdateReceiptPage(@PathVariable("product") int product, @PathVariable("customer") int customer,
-                                        Model model) {
-        Receipt receipt = receiptService.findReceiptById(product, customer);
-        System.out.println(receipt.toString());
-        model.addAttribute("receipt", receipt);
-        return "update_receipt";
-    }
 
     @GetMapping("/deleteReceiptPage/{product}/{customer}")
     public String deleteReceipt(@PathVariable("product") int product, @PathVariable("customer") int customer) {

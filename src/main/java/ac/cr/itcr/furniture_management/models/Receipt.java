@@ -19,12 +19,6 @@ public class Receipt implements Serializable {
     @Transient
     private String customerIdentification;
 
-    public Receipt(String customerIdentification, String productName) {
-        super();
-        this.productName = productName;
-        this.customerIdentification = customerIdentification;
-    }
-
     public Receipt(ReceiptId id, String customerIdentification, String productName) {
         super();
         this.id = id;

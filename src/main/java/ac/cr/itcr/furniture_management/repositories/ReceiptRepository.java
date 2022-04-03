@@ -14,8 +14,6 @@ import java.util.List;
 public interface ReceiptRepository extends JpaRepository<Receipt, ReceiptId> {
 
 
-    //TODO see if the query binds the product name and customer identification strings
-
     @Query(value = "SELECT r.id_customer,r.id_product, c.identification, p.name " +
             "FROM product p " +
             "INNER JOIN receipt r " +
@@ -25,15 +23,6 @@ public interface ReceiptRepository extends JpaRepository<Receipt, ReceiptId> {
             nativeQuery = true)
     List findAll();
 
-    @Query(value = "SELECT r.id_customer,r.id_product, c.identification, p.name " +
-            "FROM product p " +
-            "INNER JOIN receipt r " +
-            "ON r.id_product = p.id_product " +
-            "INNER JOIN customer c " +
-            "ON r.id_customer = c.id_customer " +
-            "WHERE p.id_product = ?1 and c.id_customer = ?2",
-            nativeQuery = true)
-    Object[][] findById(int product, int customer);
 
     @Modifying
     @Transactional
