@@ -7,21 +7,26 @@
 </head>
 <body>
     <div class="container"><br>
-        <a th:href="@{/saveEmployeeDepartmentPage}" class="btn btn-primary btn-sm">Agregar Orden</a><br><br>
+        <a th:href="@{/saveEmployeeDepartmentPage}" class="btn btn-primary btn-sm">Agregar Información de departamento a empleado</a><br><br>
         <table class="table">
             <thead>
             <tr>
-                <th scope="col">Empleado</th>
+                <th scope="col">Cédula</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Primer Apellido</th>
+                <th scope="col">Segundo Apellido</th>
                 <th scope="col">Departamento</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="employeeDepartment: ${employeeDepartments}">
-                <th th:text="${employeeDepartment.employeeName}" scope="row"></th>
+                <td th:text="${employeeDepartment.employeeIdentification}"></td>
+                <td th:text="${employeeDepartment.nameEmployee}"></td>
+                <td th:text="${employeeDepartment.firstLastName}"></td>
+                <td th:text="${employeeDepartment.secondLastName}"></td>
                 <td th:text="${employeeDepartment.departmentName}"></td>
                 <td>
-                    <a th:href="${'/updateEmployeeDepartmentPage/' + {employeeDepartment.getId().getNumEployee()} + '/' + {employeeDepartment.getId().getIdDepartment()} }" class="btn btn-primary">Actualizar</a>
-                    <a th:href="${'/deleteEmployeeDepartmentPage/' + {employeeDepartment.getId().getNumEployee()} + '/' + {employeeDepartment.getId().getIdDepartment()} }" class="btn btn-danger">Eliminar</a>
+                    <a th:href="${'/deleteEmployeeDepartmentPage/' + {employeeDepartment.getId().getNumEmployee()} + '/' + {employeeDepartment.getId().getIdDepartment()} }" class="btn btn-danger">Eliminar</a>
                 </td>
             </tr>
             </tbody>

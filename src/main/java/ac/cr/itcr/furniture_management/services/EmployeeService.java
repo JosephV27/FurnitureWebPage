@@ -30,8 +30,9 @@ public class EmployeeService {
         Optional<Employee> employee = employeeRepository.findById(id);
         return employee.get();
     }
-    public Employee findEmployeeByName(String name){
-        Optional<Employee> employee = employeeRepository.findByName(name);
+
+    public Employee findEmployeeByIdentification(String identification){
+        Optional<Employee> employee = employeeRepository.findByIdentification(identification);
         return employee.get();
 
     }

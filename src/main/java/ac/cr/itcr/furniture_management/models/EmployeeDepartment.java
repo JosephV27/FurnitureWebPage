@@ -3,30 +3,36 @@ package ac.cr.itcr.furniture_management.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "department")
+@Table(name = "employee_department")
 public class EmployeeDepartment {
 
     @EmbeddedId
     private EmployeeDepartmentId id;
     @Transient
-    private String employeeName;
+    private String employeeIdentification;
+    @Transient
+    private String nameEmployee;
+    @Transient
+    private String firstLastName;
+    @Transient
+    private String secondLastName;
     @Transient
     private String departmentName;
 
-    public EmployeeDepartment(EmployeeDepartmentId id, String employeeName, String departmentName) {
+    public EmployeeDepartment(EmployeeDepartmentId id, String employeeIdentification, String nameEmployee, String firstLastName, String secondLastName, String departmentName) {
         super();
         this.id = id;
-        this.employeeName = employeeName;
+        this.employeeIdentification = employeeIdentification;
+        this.nameEmployee = nameEmployee;
+        this.firstLastName = firstLastName;
+        this.secondLastName = secondLastName;
         this.departmentName = departmentName;
     }
 
-    public EmployeeDepartment(){
+    public EmployeeDepartment() {
 
     }
 
-    public void id(int numEmployee, int idDepartment){
-        this.id = new EmployeeDepartmentId(numEmployee,idDepartment);
-    }
 
     public EmployeeDepartmentId getId() {
         return id;
@@ -36,12 +42,36 @@ public class EmployeeDepartment {
         this.id = id;
     }
 
-    public String getEmployeeName() {
-        return employeeName;
+    public String getEmployeeIdentification() {
+        return employeeIdentification;
     }
 
-    public void setEmployeeName(String employeeName) {
-        this.employeeName = employeeName;
+    public void setEmployeeIdentification(String employeeIdentification) {
+        this.employeeIdentification = employeeIdentification;
+    }
+
+    public String getNameEmployee() {
+        return nameEmployee;
+    }
+
+    public void setNameEmployee(String nameEmployee) {
+        this.nameEmployee = nameEmployee;
+    }
+
+    public String getFirstLastName() {
+        return firstLastName;
+    }
+
+    public void setFirstLastName(String firstLastName) {
+        this.firstLastName = firstLastName;
+    }
+
+    public String getSecondLastName() {
+        return secondLastName;
+    }
+
+    public void setSecondLastName(String secondLastName) {
+        this.secondLastName = secondLastName;
     }
 
     public String getDepartmentName() {
@@ -52,12 +82,7 @@ public class EmployeeDepartment {
         this.departmentName = departmentName;
     }
 
-    @Override
-    public String toString() {
-        return "EmployeeDepartment{" +
-                "id=" + id +
-                ", employeeName='" + employeeName + '\'' +
-                ", departmentName='" + departmentName + '\'' +
-                '}';
+    public void id(int numEmployee, int idDepartment) {
+        this.id = new EmployeeDepartmentId(numEmployee, idDepartment);
     }
 }

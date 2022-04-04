@@ -24,7 +24,10 @@ public class EmployeeDepartmentService {
             employeeDepartments.add(new EmployeeDepartment(new EmployeeDepartmentId(((BigDecimal) row[0]).intValue(),
                     ((BigDecimal) row[1]).intValue()),
                     (String) row[2],
-                    (String) row[3]));
+                    (String) row[3],
+                    (String) row[4],
+                    (String) row[5],
+                    (String) row[6]));
         }
         return employeeDepartments;
     }

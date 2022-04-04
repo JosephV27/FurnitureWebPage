@@ -26,6 +26,9 @@ public class EmployeeDepartmentController {
     @GetMapping("/employeeDepartment")
     public String findAllEmployeeDepartmentsPage(Model model) {
         List<EmployeeDepartment> employeeDepartments = employeeDepartmentService.findAllEmployeeDepartments();
+        for (EmployeeDepartment employeeDepartment: employeeDepartments) {
+            System.out.println(employeeDepartment.toString());
+        }
         model.addAttribute("employeeDepartments", employeeDepartments);
         return "EmployeeDepartmentView";
     }
@@ -39,7 +42,7 @@ public class EmployeeDepartmentController {
 
     @PostMapping("/saveEmployeeDepartment")
     public String saveEmployeeDepartment(@ModelAttribute("employeeDepartment") EmployeeDepartment employeeDepartment) {
-        int numEmployee = employeeService.findEmployeeByName(employeeDepartment.getEmployeeName()).getNumEmployee();
+        int numEmployee = employeeService.findEmployeeByIdentification(employeeDepartment.getEmployeeIdentification()).getNumEmployee();
         int idDepartment = departmentService.findDepartmentByName(employeeDepartment.getDepartmentName()).getIdDepartment();
         employeeDepartment.id(numEmployee, idDepartment);
         employeeDepartmentService.save(employeeDepartment);

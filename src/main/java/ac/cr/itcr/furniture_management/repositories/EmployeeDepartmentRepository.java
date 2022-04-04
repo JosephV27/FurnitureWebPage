@@ -13,11 +13,11 @@ import java.util.List;
 public interface EmployeeDepartmentRepository extends JpaRepository<EmployeeDepartment, EmployeeDepartmentId> {
 
 
-    @Query(value = "SELECT ed.num_employee, ed.id_department, e.name, d.name " +
+    @Query(value = "SELECT ed.num_employee, ed.id_department, e.identification, e.name employee_name, e.first_lastname, e.second_lastname, d.name department_name " +
             "FROM employee e " +
             "INNER JOIN employee_department ed " +
             "ON ed.num_employee = e.num_employee " +
-            "INNER JOIN department d" +
+            "INNER JOIN department d " +
             "ON ed.id_department = d.id_department",
             nativeQuery = true)
     List findAll();
