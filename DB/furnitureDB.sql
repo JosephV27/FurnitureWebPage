@@ -115,7 +115,7 @@ insert into category values (4, 'Sillas', 'Sillas de madera');
 insert into category values (5, 'Muebles para interior', 'Muebles para interior de casas');
 insert into category values (6, 'Muebles lujosos', 'Muebles de lujo');
 
--- *************revisar los not NULLS en esta tabla************
+
 CREATE TABLE time_logger
 (
     num_employee     NUMBER,
@@ -176,33 +176,8 @@ CREATE TABLE receipt
 insert into user_credentials
 values (1, 'furnitureAdmin', 'pass', 'ROLE_USER', 1);
 
-
--- test
-CREATE OR REPLACE PROCEDURE sos
-AS
-    c1 SYS_REFCURSOR;
-BEGIN
-
-    open c1 for
-        SELECT * from employee;
-    DBMS_SQL.RETURN_RESULT(c1);
-
-END;
-/
-
-exec sos;
-
-
-declare
- id_temp NUMBER;
-begin 
-    id_temp := employee_management.insert_employee('1-1813-02118794', 'Marco', 'Valenciano', 'Herrera', 50000, 'active', TO_DATE('30/03/2022', 'dd/MM/yyyy'));
-    DBMS_OUTPUT.put_line(id_temp);
-end;
-/
-
 -- MODIFICATION PACKAGE
-CREATE OR REPLACE PACKAGE time_logger_managment AS
+CREATE OR REPLACE PACKAGE time_logger_management AS
     FUNCTION insert_hours_time_logger (
         v_num_employee   NUMBER,
         v_id_product     NUMBER,
@@ -210,21 +185,17 @@ CREATE OR REPLACE PACKAGE time_logger_managment AS
         v_extra_hours    NUMBER,
         v_double_hours   NUMBER,
         v_date_time_logger DATE
-    ) RETURN NUMBER;
+    ) RETURN VARCHAR2;
     
-        PROCEDURE update_hours_time_logger (
+        PROCEDURE delete_hours_time_logger (
         v_num_employee   NUMBER,
-        v_id_product     NUMBER,
-        v_ordinay_hours  NUMBER,
-        v_extra_hours    NUMBER,
-        v_double_hours   NUMBER,
         v_date_time_logger DATE
     );
 
-END time_logger_managment;
+END time_logger_management;
 /
 
-CREATE OR REPLACE PACKAGE BODY time_logger_managment AS
+CREATE OR REPLACE PACKAGE BODY time_logger_management AS
 
     FUNCTION insert_hours_time_logger (
         v_num_employee   NUMBER,
@@ -233,8 +204,8 @@ CREATE OR REPLACE PACKAGE BODY time_logger_managment AS
         v_extra_hours    NUMBER,
         v_double_hours   NUMBER,
         v_date_time_logger DATE
-    ) RETURN NUMBER AS
-        inserted NUMBER;
+    ) RETURN VARCHAR2 IS
+         PRAGMA AUTONOMOUS_TRANSACTION;
         
     BEGIN
     
@@ -248,64 +219,36 @@ CREATE OR REPLACE PACKAGE BODY time_logger_managment AS
         );
         
         COMMIT;
-        RETURN inserted;
+        RETURN v_num_employee || ' INSERTED'  ;
     END insert_hours_time_logger;
     
     
-        PROCEDURE update_hours_time_logger (
+        PROCEDURE delete_hours_time_logger (
          v_num_employee   NUMBER,
-        v_id_product     NUMBER,
-        v_ordinay_hours  NUMBER,
-        v_extra_hours    NUMBER,
-        v_double_hours   NUMBER,
         v_date_time_logger DATE
     ) IS
     BEGIN
-        UPDATE time_logger
-        SET
-            id_product = v_id_product,
-            ordinary_hours = v_ordinay_hours,
-            extra_hours = v_extra_hours,
-            double_hours = v_double_hours
+
+            DELETE FROM time_logger
         WHERE
                 num_employee = v_num_employee
             AND date_time_logger = v_date_time_logger;
 
     END;
     
-END time_logger_managment;
+END time_logger_management;
 /
-
-declare
- id_temp NUMBER;
-begin 
-    id_temp := time_logger_managment.insert_hours_time_logger(25, 9, 8, 0, 0, sysdate);
-    DBMS_OUTPUT.put_line(id_temp);
-end;
-/
-
-select * from time_logger where num_employee = 25 and date_time_logger = TO_DATE('2022/04/12', 'YYYY/MM/DD');
-
-insert into time_logger values (25, 9, 6, 2, 0, TO_DATE('2022/04/12', 'YYYY/MM/DD'));
-insert into time_logger values (25, 9, 4, 0, 0, TO_DATE('2022/04/19', 'YYYY/MM/DD'));
-insert into time_logger values (14, 3, 10, 2, 0, TO_DATE('2022/04/22', 'YYYY/MM/DD'));
-
-
-select * from employee;
-select * from product;
-
-exec time_logger_managment.update_hours_time_logger(25, 9, 8, 3, 0, TO_DATE('2022/04/12', 'YYYY/MM/DD'));
 
 -- CONSULTATION PACKAGE
 CREATE OR REPLACE PACKAGE consult_time_logger AS
+    FUNCTION get_employee_info (
+        v_num_employee NUMBER
+    ) RETURN VARCHAR2;
 
-   FUNCTION get_employee_info (
-        v_num_employee   NUMBER
-    ) RETURN SYS_REFCURSOR;
-    
-        PROCEDURE get_hours_worked_by_date (
-        v_initial_date DATE,
-        v_ending_date DATE
+    PROCEDURE get_hours_worked_by_date (
+        v_initial_date IN DATE,
+        v_ending_date  IN DATE,
+        hours_worked_cursor OUT SYS_REFCURSOR
     );
 
 END consult_time_logger;
@@ -315,42 +258,49 @@ CREATE OR REPLACE PACKAGE BODY consult_time_logger AS
 
      FUNCTION get_employee_info (
         v_num_employee   NUMBER
-    ) RETURN SYS_REFCURSOR IS
-    employee_info SYS_REFCURSOR;
+    ) RETURN VARCHAR2 AS
+    employee_cursor SYS_REFCURSOR;
+    employee_info VARCHAR2(100);
     BEGIN 
-    OPEN employee_info FOR
-    select * from
-    employee 
-    where num_employee = v_num_employee;
     
+       FOR employee_cursor IN (
+      select * from
+    employee 
+    where num_employee = v_num_employee
+    ) LOOP
+        employee_info := employee_cursor.num_employee || ' ' || employee_cursor.identification || ' ' || 
+        employee_cursor.name || ' ' || employee_cursor.first_lastname || ' ' || employee_cursor.second_lastname
+        || ' ' || employee_cursor.salary || ' ' || employee_cursor.status || ' ' || employee_cursor.date_admission;
+    END LOOP;
+        
     RETURN employee_info;
     
     END get_employee_info;
     
-        PROCEDURE get_hours_worked_by_date (
-        v_initial_date DATE,
-        v_ending_date DATE
-    ) AS
-     hours_worked_info SYS_REFCURSOR;
-    BEGIN 
     
-        open hours_worked_info for
-        select e.num_employee, e.name, e.first_lastname, e.second_lastname, t.id_product, t.ordinary_hours, t.extra_hours, t.double_hours, t.date_time_logger from 
-        employee e 
-        inner join time_logger t
-        on e.num_employee = t.num_employee 
-        where t.date_time_logger BETWEEN v_initial_date AND v_ending_date;
-        
-        DBMS_SQL.RETURN_RESULT(hours_worked_info);
-         
+    PROCEDURE get_hours_worked_by_date (
+        v_initial_date DATE,
+        v_ending_date  DATE,
+        hours_worked_cursor OUT SYS_REFCURSOR
+    ) AS
+    BEGIN
+        OPEN hours_worked_cursor FOR SELECT
+                                       e.num_employee,
+                                       t.id_product,
+                                       t.ordinary_hours,
+                                       t.extra_hours,
+                                       t.double_hours,
+                                       t.date_time_logger
+                                   FROM
+                                            employee e
+                                       INNER JOIN time_logger t ON e.num_employee = t.num_employee
+                                   WHERE
+                                       t.date_time_logger BETWEEN v_initial_date AND v_ending_date;
+       
     END;
     
 END consult_time_logger; 
 /
-
-exec consult_time_logger.get_hours_worked_by_date(TO_DATE('2022/04/10', 'YYYY/MM/DD'), TO_DATE('2022/05/10', 'YYYY/MM/DD'));
-
-select * from time_logger;
 
 -- total hours select
 select e.num_employee, e.name, e.first_lastname, e.second_lastname, sum(t.ordinary_hours) total_ordinary_hours, sum(t.extra_hours) total_extra_hours, sum(t.double_hours) total_double_hours from 
@@ -360,15 +310,6 @@ select e.num_employee, e.name, e.first_lastname, e.second_lastname, sum(t.ordina
         where t.date_time_logger BETWEEN v_initial_date AND v_ending_date
         group by e.num_employee, e.name, e.first_lastname, e.second_lastname;
 
-declare
-  employee_info SYS_REFCURSOR;
-begin 
-    employee_info := consult_time_logger.get_employee_info(25);
-    DBMS_SQL.RETURN_RESULT(employee_info);
-end;
-/
-
-
 CREATE TABLE employeeLogger (
     employee_logger_id NUMBER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
     transaction_name VARCHAR2(10),
@@ -376,6 +317,8 @@ CREATE TABLE employeeLogger (
     value_modified   VARCHAR2(50),
     transaction_date DATE
 );
+
+select * from employeeLogger;
 
 CREATE OR REPLACE TRIGGER employees_logger_trg AFTER
     UPDATE OR INSERT OR DELETE ON employee
@@ -453,5 +396,18 @@ BEGIN
 
 END;
 /
+
+-- TRANSACTIONS SUMARY
+
+SELECT COUNT(*) FROM employee WHERE status = 'activo';
+
+SELECT COUNT(*) FROM employee WHERE status = 'inactivo';
+
+SELECT SUM(salary) FROM employee WHERE status = 'activo';
+
+SELECT SUM(salary) * 12 FROM employee WHERE status = 'activo';
+
+SELECT SUM(ordinary_hours) + SUM(extra_hours) + SUM(double_hours) FROM time_logger WHERE EXTRACT(MONTH FROM date_time_logger) = EXTRACT(MONTH FROM SYSDATE);
+
 
 

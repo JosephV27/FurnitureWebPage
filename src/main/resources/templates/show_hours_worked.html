@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+<body>
+
+<div class="container"><br>
+
+    <a th:href="@{/timeLogger}" class="btn btn-primary btn-sm">Volver a registro de horas</a><br><br>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Número de Empleado</th>
+            <th scope="col">ID de Producto</th>
+            <th scope="col">Horas Ordinarias</th>
+            <th scope="col">Horas Extra</th>
+            <th scope="col">Horas Dobles</th>
+            <th scope="col">Fecha</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="timeLogger: ${timeLoggers}">
+            <th th:text="${timeLogger.numEmployee}" scope="row"></th>
+            <th th:text="${timeLogger.idProduct}" scope="row"></th>
+            <td th:text="${timeLogger.ordinaryHours}"></td>
+            <td th:text="${timeLogger.extraHours}"></td>
+            <td th:text="${timeLogger.doubleHours}"></td>
+            <td th:text="${timeLogger.dateTimeLogger}"></td>
+
+            <td>
+<!--                <a th:href="${'/updateTimeLoggerPage/' + timeLogger.numEmployee + '/' + timeLogger.dateTimeLogger}" class="btn btn-primary">Actualizar</a>-->
+                <a th:href="${'/deleteTimeLogger/'+ timeLogger.numEmployee + '/' + timeLogger.dateTimeLogger }" class="btn btn-danger">Eliminar</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>

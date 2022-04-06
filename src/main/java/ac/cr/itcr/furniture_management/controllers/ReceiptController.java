@@ -1,7 +1,6 @@
 package ac.cr.itcr.furniture_management.controllers;
 
 import ac.cr.itcr.furniture_management.models.Receipt;
-import ac.cr.itcr.furniture_management.models.ReceiptId;
 import ac.cr.itcr.furniture_management.services.CustomerService;
 import ac.cr.itcr.furniture_management.services.ProductService;
 import ac.cr.itcr.furniture_management.services.ReceiptService;

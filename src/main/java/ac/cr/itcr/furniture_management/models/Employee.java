@@ -25,6 +25,16 @@ public class Employee {
     @Column(name = "date_admission")
     private Date dateAdmission;
 
+    public Employee(int numEmployee, String identification, String name, String firstLastName, String secondLastName, int salary, String status) {
+        this.numEmployee = numEmployee;
+        this.identification = identification;
+        this.name = name;
+        this.firstLastName = firstLastName;
+        this.secondLastName = secondLastName;
+        this.salary = salary;
+        this.status = status;
+    }
+
     public Employee(String identification, String name, String firstLastName, String secondLastName, int salary) {
         super();
         this.identification = identification;
@@ -82,6 +92,8 @@ public class Employee {
     }
 
     public void setNumEmployee(int numEmployee) {
+        System.out.println("AQUIIIIIIIIIIIIIIIII");
+        System.out.println(numEmployee);
         this.numEmployee = numEmployee;
     }
 
@@ -127,7 +139,7 @@ public class Employee {
                 ", secondLastName='" + secondLastName + '\'' +
                 ", salary=" + salary +
                 ", status='" + status + '\'' +
-                ", dateAdmission=" + dateAdmission +
+//                ", dateAdmission=" + dateAdmission +
                 '}';
     }
 }

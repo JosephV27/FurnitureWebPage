@@ -17,12 +17,12 @@
                 <div class="navbar-nav">
                     <a class="nav-link active" aria-current="page" href="/">Empleados</a>
                     <a class="nav-link active" aria-current="page" href="/timeLogger">Registro Horas</a>
-                    <a class="nav-link active" aria-current="page" href="/timeLogger">Histórico Horas</a>
                     <a class="nav-link active" aria-current="page" href="/department">Departamentos</a>
                     <a class="nav-link active" aria-current="page" href="/customer">Clientes</a>
                     <a class="nav-link active" aria-current="page" href="/product">Productos</a>
                     <a class="nav-link active" aria-current="page" href="/receipt">Facturas</a>
                     <a class="nav-link active" aria-current="page" href="/employeeDepartment">Empleado-Departamento</a>
+                    <a class="nav-link active" aria-current="page" href="/employeeDepartment">Resumen Transacciones</a>
 
                 </div>
             </div>
@@ -32,44 +32,47 @@
 
     </div>
 
-
             <div class="container"><br>
 
-                <h1>Registro de Horas</h1><br>
                 <div class="row">
+
+
                     <div class="col">
 
-                        <form class="col-5"  method="post">
+                        <h1>Registro de Horas</h1><br>
+
+                        <form class="col-5"  th:action="@{/saveTimeLogger}" th:object="${timeLogger}" method="post">
                             <br>
 
                             <div class="form-group">
                                 <label class="form-label">Número de Empleado</label>
-                                <input type="number" class="form-control">
+                                <input type="number" th:field="*{numEmployee}" id="numEmployee" name="numEmployee" class="form-control">
                             </div><br>
 
                             <div class="form-group">
                                 <label class="form-label">ID de Producto</label>
-                                <input type="number" class="form-control">
+                                <input type="number" th:field="*{idProduct}" id="idProduct" name="idProduct" class="form-control">
                             </div><br>
 
                             <div class="form-group">
                                 <label class="form-label">Horas Ordinarias</label>
-                                <input type="number" class="form-control">
+                                <input type="number" th:field="*{ordinaryHours}" id="ordinaryHours" name="ordinaryHours" class="form-control">
                             </div><br>
 
                             <div class="form-group">
                                 <label class="form-label">Horas Extras</label>
-                                <input type="number" class="form-control">
+                                <input type="number" th:field="*{extraHours}" id="extraHours" name="extraHours" class="form-control">
                             </div><br>
 
                             <div class="form-group">
                                 <label class="form-label">Horas Dobles</label>
-                                <input type="number" class="form-control">
+                                <input type="number" th:field="*{doubleHours}" id="doubleHours" name="doubleHours" class="form-control">
                             </div><br>
 
                             <div class="form-group">
                                 <label class="form-label">Fecha</label>
-                                <input type="date" class="form-control">
+                                <label class="form-label">dd/mm/yyyy</label>
+                                <input type="text" th:field="*{dateTimeLogger}" id="dateTimeLogger" name="dateTimeLogger" class="form-control">
                             </div><br>
 
                             <br>
@@ -79,26 +82,47 @@
 
                     </div>
                     <div class="col">
-                        <form class="col-5"  method="post">
+
+                        <form class="col-5" th:action="@{/getEmployee}" th:object="${employee}" method="get">
                             <br>
 
                             <div class="form-group">
                                 <label class="form-label">Número de Empleado</label>
-                                <input type="number" class="form-control">
+                                <input type="number" th:field="*{numEmployee}" id="numEmployee" name="numEmployee" class="form-control">
                             </div>
 
                             <br>
                             <button type="submit" class="btn btn-primary">Consultar Empleado</button>
 
                         </form>
+
+                        <br>
+
+                        <form class="col-5" th:action="@{/HistoricalTimeLogger}" th:object="${historicalTimeLogger}" method="get">
+                            <br>
+
+                            <div class="form-group">
+                                <label class="form-label">Fecha de Inicio - dd/mm/yyyy</label>
+                                <input type="text" th:field="*{initialDate}" id="initialDate" name="initialDate" class="form-control">
+                            </div>
+
+                            <br>
+
+                            <div class="form-group">
+                                <label class="form-label">Fecha de Finalización - dd/mm/yyyy</label>
+                                <input type="text" th:field="*{endingDate}" id="endingDate" name="endingDate" class="form-control">
+                            </div>
+
+                            <br>
+                            <button type="submit" class="btn btn-primary">Ver histórico de horas</button>
+
+                        </form>
+
+
                     </div>
                 </div>
 
             </div>
-
-<!--            <a th:href="@{/}" class="btn btn-primary btn-sm">Consultar empleado</a><br><br>-->
-
-
 
 </body>
 </html>
